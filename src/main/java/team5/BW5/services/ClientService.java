@@ -30,7 +30,7 @@ public class ClientService {
     }
 
     //SAVE
-    public Client saveClient(ClientRequestDTO payload) throws BadRequestException{
+    public Client save (ClientRequestDTO payload) throws BadRequestException{
         this.clientDAO.findByEmail(payload.email()).ifPresent(
                 client->{throw new BadRequestException("the email "+client.getEmail()+" is already in the system");}
         );
@@ -38,7 +38,7 @@ public class ClientService {
         return this.clientDAO.save(client);
     }
     //DELETE
-    public void deleteClient(long id){
+    public void delete (long id){
         Client found =this.findById(id);
         this.clientDAO.delete(found);
     }

@@ -1,6 +1,7 @@
 package team5.BW5.payloads;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public record ClientRequestDTO(
         @NotEmpty(message = "Required field: business_name")
@@ -9,9 +10,9 @@ public record ClientRequestDTO(
         String p_IVA,
         @NotEmpty(message = "Required field: email of the company")
         String email,
-        @NotEmpty(message = "Required field: phone of the company")
+        @NotNull(message = "Required field: phone of the company")
         Integer phone,
-        @NotEmpty(message = "Required field: annual turnover of the company")
+        @NotNull(message = "Required field: annual turnover of the company")
         double annual_turnover,
         @NotEmpty(message = "Required field: contact name for the company")
         String contactName,
@@ -19,8 +20,8 @@ public record ClientRequestDTO(
         String contactSurname,
         @NotEmpty(message = "Required field: contact email for the company")
         String contactEmail,
-        @NotEmpty(message = "Required field: contact phone for the company")
-        String contactPhone
+        @NotNull(message = "Required field: contact phone for the company")
+        Integer contactPhone
 
 ) {
 }
