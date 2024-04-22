@@ -18,7 +18,7 @@ public class Province {
 
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "province")
     private List<Town> townList;
 
     private String provinceCode;
