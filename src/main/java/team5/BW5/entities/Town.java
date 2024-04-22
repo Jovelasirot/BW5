@@ -1,5 +1,6 @@
 package team5.BW5.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class Town {
     @JoinColumn(name = "province_id")
     private Province province;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "town")
     private List<Address> addressList; // importare classe address quando presente in Entities
 }

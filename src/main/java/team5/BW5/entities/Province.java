@@ -1,5 +1,6 @@
 package team5.BW5.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class Province {
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "province")
     private List<Town> townList;
 
