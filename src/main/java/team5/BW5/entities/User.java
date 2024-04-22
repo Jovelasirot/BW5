@@ -1,5 +1,6 @@
 package team5.BW5.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -10,6 +11,7 @@ import team5.BW5.enums.UserRole;
 @Entity
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties({"password"})
 public class User {
 
     @Id
