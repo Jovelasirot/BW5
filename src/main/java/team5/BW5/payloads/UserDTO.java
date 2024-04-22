@@ -11,6 +11,9 @@ public record UserDTO(@NotEmpty(message = "The name is required")
                       @NotEmpty(message = "The email is required")
                       @Email(message = "The email given is invalid")
                       String email,
+                      @NotEmpty(message = "The username is required")
+                      @Size(min = 2, max = 30, message = "The username can't be less than two characters and more than 30 characters")
+                      String username,
                       @NotEmpty(message = "The password is required")
                       @Size(min = 8, message = "The password can't be less than eight characters characters")
                       String password,

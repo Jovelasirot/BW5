@@ -20,25 +20,27 @@ public class User {
     @Setter(value = AccessLevel.NONE)
     private Long id;
 
-    private String userName;
-
     private String name;
 
     private String surname;
 
     private String email;
 
-    private String avatar;
+    private String username;
+
+    private String password;
 
     private UserRole role;
 
-    public User(String userName, String name, String surname, String email, String avatar, UserRole role) {
-        this.userName = userName;
+    private String avatar;
+
+    public User(String name, String surname, String email, String username, String password, String role, String avatar) {
         this.name = name;
         this.surname = surname;
         this.email = email;
+        this.username = username;
+        this.password = password;
+        this.role = UserRole.valueOf(role);
         this.avatar = avatar;
-        this.role = role;
     }
-    
 }
