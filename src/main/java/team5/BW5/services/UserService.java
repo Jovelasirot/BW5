@@ -1,26 +1,34 @@
 package team5.BW5.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import team5.BW5.entities.User;
 import team5.BW5.exceptions.BadRequestException;
 import team5.BW5.exceptions.NotFoundException;
 import team5.BW5.payloads.UserDTO;
 import team5.BW5.repositories.UserDAO;
 
+import java.io.IOException;
+
 @Service
 public class UserService {
     @Autowired
     private UserDAO uDAO;
 
+    @Autowired
+    private Cloudinary cloudinaryUploader;
+
     public Page<User> getUsers(int page, int size, String sortBy) {
         if (size > 100) size = 100;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        return this.uDAO.(pageable);
+        return this.uDAO.findAll(pageable);
     }
 
     public User save(UserDTO payload) throws BadRequestException {
@@ -50,7 +58,7 @@ public class UserService {
 
         userFound.setName(updatedUser.getName());
         userFound.setSurname(updatedUser.getSurname());
-        userFound.setEmail(updatedUser.getEmail());
+        userFound.setEmail(updatedUser.getEmail() == null ? userFound.getEmail() : updatedUser.getEmail());
 
         return this.uDAO.save(userFound);
     }
@@ -63,6 +71,16 @@ public class UserService {
 
     public User findByEmail(String email) {
         return uDAO.findByEmail(email).orElseThrow(() -> new NotFoundException(email));
+    }
+
+    public String uploadProfileImage(Long userId, MultipartFile image) throws IOException {
+        User user = findById(userId);
+
+        String url = (String) cloudinaryUploader.uploader().upload(image.getBytes(), ObjectUtils.emptyMap()).get("url");
+
+        user.setAvatar(url);
+        uDAO.save(user);
+        return url;
     }
 
 }
