@@ -24,4 +24,10 @@ public class Invoice {
     @ManyToOne
     @JoinColumn
     private Client client;
+
+    public Invoice(LocalDate date, double amount, String invoice_state) {
+        this.date = date;
+        this.amount = amount;
+        this.invoice_state = invoice_state;
+    }
 }
