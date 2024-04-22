@@ -39,4 +39,16 @@ public class Client {
 
     @OneToMany(mappedBy = "client")
     private List<Address> addresses;
+
+    public Client(String email, String business_name, String p_IVA, int phone, double annual_turnover, String contactName, String contactSurname, String contactEmail, int contactPhone) {
+        this.email = email;
+        this.business_name = business_name;
+        this.p_IVA = p_IVA;
+        this.phone = phone;
+        this.annual_turnover = annual_turnover;
+        this.contactName = contactName;
+        this.contactSurname = contactSurname;
+        this.contactEmail = contactEmail;
+        this.contactPhone = contactPhone;
+    }
 }
