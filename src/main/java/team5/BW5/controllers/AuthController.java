@@ -7,6 +7,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import team5.BW5.exceptions.BadRequestException;
 import team5.BW5.payloads.UserDTO;
+import team5.BW5.payloads.UserLoginDTO;
+import team5.BW5.payloads.UserLoginResponseDTO;
 import team5.BW5.payloads.UserResponseDTO;
 import team5.BW5.services.AuthService;
 import team5.BW5.services.UserService;
@@ -30,5 +32,14 @@ public class AuthController {
             return new UserResponseDTO(this.userService.save(body).getId());
         }
     }
+
+    @PostMapping("/login")
+    public UserLoginResponseDTO loginUser(@RequestBody @Validated UserLoginDTO body, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
+        return new UserLoginResponseDTO(this.authService.authenticateUserAndGenerateToken(body));
+    }
+
 
 }

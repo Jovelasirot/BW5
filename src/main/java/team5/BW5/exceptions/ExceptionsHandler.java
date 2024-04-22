@@ -1,8 +1,8 @@
 package team5.BW5.exceptions;
 
 
-
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -41,11 +41,10 @@ public class ExceptionsHandler {
         return new ErrorResponseDTO("Missing a value", LocalDateTime.now());
     }
 
-
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorResponseDTO handleUnauthorized(UnauthorizedException ex) {
-        return new ErrorResponseDTO(ex.getMessage(), LocalDateTime.now());
+    public ErrorsPayLoad handleUnauthorized(UnauthorizedException ex) {
+        return new ErrorsPayLoad(ex.getMessage(), LocalDateTime.now());
     }
 
     @ExceptionHandler(Exception.class)
@@ -55,5 +54,10 @@ public class ExceptionsHandler {
         return new ErrorsPayLoad("Error server side", LocalDateTime.now());
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorsPayLoad handleAccessDenied(AccessDeniedException ex) {
+        return new ErrorsPayLoad("You don't have the permission to access the resource", LocalDateTime.now());
+    }
 
 }
