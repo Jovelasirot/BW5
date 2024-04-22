@@ -16,7 +16,7 @@ import team5.BW5.services.UserService;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     private UserService userService;

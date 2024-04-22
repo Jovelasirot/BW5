@@ -1,9 +1,6 @@
 package team5.BW5.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +27,7 @@ public class User {
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     private String avatar;
