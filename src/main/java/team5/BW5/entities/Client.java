@@ -37,7 +37,6 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private List <Invoice> invoices;
 
-    //SITUATIONSHIP con L'INIDIRZZO(da scommentare quando ci si mergia con quell'entity)
-//    @OneToMany(mappedBy = "client")
-//    private List<Address> addresses;
+    @OneToMany(mappedBy = "client")
+    private List<Address> addresses;
 }
