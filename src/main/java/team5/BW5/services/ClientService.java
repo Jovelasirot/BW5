@@ -49,8 +49,7 @@ public class ClientService {
                     throw new BadRequestException("the email " + client.getEmail() + " is already in the system");
                 }
         );
-        Client client = new Client(payload.email(), payload.businessName(), payload.pIva(), payload.phone(), payload.annualTurnover(),
-                payload.contactName(), payload.contactSurname(), payload.contactEmail(), payload.phone(), LocalDate.now(), LocalDate.parse(payload.lastContact()));
+        Client client = new Client(payload.businessName(), payload.pIva(), payload.email(), payload.phone(),payload.pec(), LocalDate.now(),LocalDate.parse(payload.lastContact()),payload.annualTurnover(),payload.contactName(),payload.contactSurname(),payload.contactEmail(),payload.contactPhone());
         return this.clientDAO.save(client);
     }
 
