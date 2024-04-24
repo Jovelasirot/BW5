@@ -41,5 +41,4 @@ public class AuthController {
         return new UserLoginResponseDTO(this.authService.authenticateUserAndGenerateToken(body));
     }
 
-
 }

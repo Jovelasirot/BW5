@@ -23,7 +23,6 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
-
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ClientResponseDTO saveClient(@RequestBody @Validated ClientDTO payload, BindingResult validation) {
