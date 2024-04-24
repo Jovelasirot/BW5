@@ -49,5 +49,8 @@ public class Client {
         this.contactEmail = contactEmail;
         this.contactPhone = contactPhone;
     }
+    public Client(long id){
+        this.id=id;
+    }
 
 }
