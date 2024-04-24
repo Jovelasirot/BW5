@@ -1,16 +1,17 @@
 package team5.BW5.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
+import lombok.*;
+@Getter
+@Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Address {
     //ATTRIBUTES LIST:
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private long id;
     private String address;
     private String addressNumber;
@@ -23,5 +24,15 @@ public class Address {
     @JoinColumn
     private Client client;
 
-    //to create method to return complete location
+    public Address(String address, String addressNumber, String zipcode, String location, Town town, Client client) {
+        this.address = address;
+        this.addressNumber = addressNumber;
+        this.zipcode = zipcode;
+        this.location = location;
+        this.town = town;
+        this.client = client;
+    }
+
+//to create method to return complete location
+
 }
