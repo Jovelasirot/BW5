@@ -18,15 +18,15 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private long id;
-    private String business_name;
-    private String p_IVA;
+    private String businessName;
+    private String pIVA;
     private String logo_URL;
     private String email;
     private int phone;
     private String pec;
-    private LocalDate starting_date;
-    private LocalDate last_contact;
-    private double annual_turnover;
+    private LocalDate startingDate;
+    private LocalDate lastContact;
+    private double annualTurnover;
     private String contactName;
     private String contactSurname;
     private String contactEmail;
@@ -38,16 +38,17 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private List<Address> addresses;
 
-    public Client(String email, String business_name, String p_IVA, int phone, double annual_turnover, String contactName, String contactSurname, String contactEmail, int contactPhone) {
+    public Client(String email, String business_name, String p_IVA, int phone, double annual_turnover, String contactName, String contactSurname, String contactEmail, int contactPhone,LocalDate starting_date) {
         this.email = email;
-        this.business_name = business_name;
-        this.p_IVA = p_IVA;
+        this.businessName = business_name;
+        this.pIVA= p_IVA;
         this.phone = phone;
-        this.annual_turnover = annual_turnover;
+        this.annualTurnover = annual_turnover;
         this.contactName = contactName;
         this.contactSurname = contactSurname;
         this.contactEmail = contactEmail;
         this.contactPhone = contactPhone;
+        this.startingDate=LocalDate.now();
     }
     public Client(long id){
         this.id=id;

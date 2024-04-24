@@ -43,7 +43,7 @@ public class InvoiceController {
         this.invoiceService.delete(id);
     }
     @GetMapping("/{id}")
-//    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthorities('ADMIN','USER')")
     public Invoice getInvoiceById(@PathVariable Long id){
         return this.invoiceService.findById(id);
     }

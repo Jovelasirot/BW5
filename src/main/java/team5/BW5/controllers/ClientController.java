@@ -59,5 +59,10 @@ public class ClientController {
     public void deleteClient(@PathVariable Long id){
         this.clientService.delete(id);
     }
+    @PutMapping("{clientId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Client updateClient(@PathVariable Long clientId, @RequestBody Client payload) {
+        return this.clientService.update(clientId, payload);
+    }
 
 }

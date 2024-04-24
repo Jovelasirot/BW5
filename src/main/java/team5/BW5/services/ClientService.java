@@ -15,6 +15,7 @@ import team5.BW5.exceptions.NotFoundException;
 import team5.BW5.payloads.ClientRequestDTO;
 import team5.BW5.repositories.ClientDAO;
 import java.io.IOException;
+import java.time.LocalDate;
 
 @Service
 public class ClientService {
@@ -43,7 +44,7 @@ public class ClientService {
         this.clientDAO.findByEmail(payload.email()).ifPresent(
                 client->{throw new BadRequestException("the email "+client.getEmail()+" is already in the system");}
         );
-        Client client=new Client(payload.email(), payload.business_name(), payload.p_IVA(), payload.phone(), payload.annual_turnover(), payload.contactName(), payload.contactSurname(), payload.contactEmail(), payload.phone());
+        Client client=new Client(payload.email(), payload.business_name(), payload.p_IVA(), payload.phone(), payload.annual_turnover(), payload.contactName(), payload.contactSurname(), payload.contactEmail(), payload.phone(), LocalDate.now());
         return this.clientDAO.save(client);
     }
     //DELETE
@@ -58,5 +59,24 @@ public class ClientService {
         client.setLogo_URL(url);
         this.clientDAO.save(client);
         return url;
+    }
+    //GENERIC UPDATE
+    public Client update(Long clientId, Client updatedClient) {
+        Client clientFound = clientDAO.findById(clientId)
+                .orElseThrow(() -> new NotFoundException(clientId));
+
+        clientFound.setBusinessName(updatedClient.getBusinessName());
+        clientFound.setPIVA(updatedClient.getPIVA() == null ? clientFound.getPIVA() : updatedClient.getPIVA());
+        clientFound.setEmail(updatedClient.getEmail() == null ? clientFound.getEmail() : updatedClient.getEmail());
+        clientFound.setPhone(updatedClient.getPhone() == -1 ? clientFound.getPhone() : updatedClient.getPhone());
+        clientFound.setPec(updatedClient.getPec() == null ? clientFound.getPec() : updatedClient.getPec());
+        clientFound.setStartingDate(updatedClient.getStartingDate() == null ? clientFound.getStartingDate() : updatedClient.getStartingDate());
+        clientFound.setLastContact(updatedClient.getLastContact() == null ? clientFound.getLastContact() : updatedClient.getLastContact());
+        clientFound.setAnnualTurnover(updatedClient.getAnnualTurnover() == -1 ? clientFound.getAnnualTurnover() : updatedClient.getAnnualTurnover());
+        clientFound.setContactName(updatedClient.getContactName() == null ? clientFound.getContactName() : updatedClient.getContactName());
+        clientFound.setContactSurname(updatedClient.getContactSurname() == null ? clientFound.getContactSurname() : updatedClient.getContactSurname());
+        clientFound.setContactPhone(updatedClient.getPhone() == -1 ? clientFound.getContactPhone() : updatedClient.getContactPhone());
+
+        return clientDAO.save(clientFound);
     }
 }
