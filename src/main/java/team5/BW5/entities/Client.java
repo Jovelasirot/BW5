@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"invoices","addresses"})
+@JsonIgnoreProperties({"invoices", "addresses"})
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,25 +33,46 @@ public class Client {
     private int contactPhone;
 
     @OneToMany(mappedBy = "client")
-    private List <Invoice> invoices;
+    private List<Invoice> invoices;
 
     @OneToMany(mappedBy = "client")
     private List<Address> addresses;
 
-    public Client(String email, String business_name, String p_IVA, int phone, double annual_turnover, String contactName, String contactSurname, String contactEmail, int contactPhone,LocalDate starting_date) {
+//    public Client(String email, String business_name, String p_IVA, int phone, double annual_turnover, String contactName, String contactSurname, String contactEmail, int contactPhone,LocalDate starting_date) {
+//        this.email = email;
+//        this.businessName = business_name;
+//        this.pIVA= p_IVA;
+//        this.phone = phone;
+//        this.annualTurnover = annual_turnover;
+//        this.contactName = contactName;
+//        this.contactSurname = contactSurname;
+//        this.contactEmail = contactEmail;
+//        this.contactPhone = contactPhone;
+//        this.startingDate=LocalDate.now();
+//        this.
+//    }
+
+
+    public Client(String businessName, String pIVA, String logo_URL, String email, int phone, String pec, LocalDate startingDate, LocalDate lastContact, double annualTurnover, String contactName, String contactSurname, String contactEmail, int contactPhone, List<Invoice> invoices, List<Address> addresses) {
+        this.businessName = businessName;
+        this.pIVA = pIVA;
+        this.logo_URL = logo_URL;
         this.email = email;
-        this.businessName = business_name;
-        this.pIVA= p_IVA;
         this.phone = phone;
-        this.annualTurnover = annual_turnover;
+        this.pec = pec;
+        this.startingDate = startingDate;
+        this.lastContact = lastContact;
+        this.annualTurnover = annualTurnover;
         this.contactName = contactName;
         this.contactSurname = contactSurname;
         this.contactEmail = contactEmail;
         this.contactPhone = contactPhone;
-        this.startingDate=LocalDate.now();
+        this.invoices = invoices;
+        this.addresses = addresses;
     }
-    public Client(long id){
-        this.id=id;
+
+    public Client(long id) {
+        this.id = id;
     }
 
 }

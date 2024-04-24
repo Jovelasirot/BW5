@@ -10,15 +10,10 @@ public record ClientDTO(@NotEmpty(message = "Business name is required")
                         @NotEmpty(message = "Email is required")
                         @Email(message = "Invalid email format")
                         String email,
-                        @NotEmpty(message = "Phone is required")
-                        @Size(min = 10, max = 10, message = "Phone number must be 10 digits")
-                        String phone,
+                        @NotNull(message = "Phone is required")
+                        int phone,
                         @NotEmpty(message = "The pec is required")
                         String pec,
-                        @NotEmpty(message = "The starting date is required")
-                        @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Invalid date format (yyyy-mm-dd)")
-                        String startingDate,
-
                         @NotEmpty(message = "The last contact date is required")
                         @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Invalid date format (yyyy-mm-dd)")
                         String lastContact,

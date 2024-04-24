@@ -1,4 +1,5 @@
 package team5.BW5.controllers;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,35 +21,40 @@ public class InvoiceController {
 
     //http://localhost:3001/invoices
     @GetMapping
-//    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public Page<Invoice> getInvoices(@RequestParam(defaultValue = "0")int page,
-                                     @RequestParam(defaultValue ="15" ) int size,
-                                     @RequestParam(defaultValue = "id") String sort_by){
+    @PreAuthorize("hasAnyAuthorities('ADMIN','USER')")
+    public Page<Invoice> getInvoices(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "15") int size,
+                                     @RequestParam(defaultValue = "id") String sort_by) {
         return this.invoiceService.getInvoices(page, size, sort_by);
     }
+
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
-    public InvoiceRespDTO saveInvoice(@RequestBody @Validated InvoiceRequestDTO payload, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+    public InvoiceRespDTO saveInvoice(@RequestBody @Validated InvoiceRequestDTO payload, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             throw new BadRequestException(bindingResult.getAllErrors());
         }
         return new InvoiceRespDTO(this.invoiceService.save(payload).getId());
     }
+
     //http://localhost:3001/invoices/id
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteInvoice(@PathVariable Long id){
+    public void deleteInvoice(@PathVariable Long id) {
         this.invoiceService.delete(id);
     }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthorities('ADMIN','USER')")
-    public Invoice getInvoiceById(@PathVariable Long id){
+    public Invoice getInvoiceById(@PathVariable Long id) {
         return this.invoiceService.findById(id);
     }
+
     @PutMapping("/{id}")
-    public  Invoice updateInvoice(@PathVariable long id, @RequestBody Invoice updatedInvoice){
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Invoice updateInvoice(@PathVariable long id, @RequestBody Invoice updatedInvoice) {
         return this.invoiceService.updateInvoice(id, String.valueOf(updatedInvoice.getClient().getId()), updatedInvoice.getInvoice_state());
     }
 

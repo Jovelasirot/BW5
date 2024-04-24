@@ -25,26 +25,26 @@ public class InvoiceService {
     ClientDAO clientDAO;
 
     //FINDING By ID
-    public Invoice findById(long id){
-        return this.invoiceDAO.findById(id).orElseThrow(()->new NotFoundException("invoice n. "+id+" does not exist!"));
+    public Invoice findById(long id) {
+        return this.invoiceDAO.findById(id).orElseThrow(() -> new NotFoundException("invoice n. " + id + " does not exist!"));
     }
 
     //SAVE
-    public Invoice save(InvoiceRequestDTO payload){
-        Invoice invoice= new Invoice(payload.date(),payload.amount(),payload.state());
+    public Invoice save(InvoiceRequestDTO payload) {
+        Invoice invoice = new Invoice(payload.date(), payload.amount(), payload.state() == null ? "EMITTED" : payload.state());
         return this.invoiceDAO.save(invoice);
     }
 
     //DELETE
-    public void delete(long id){
-       Invoice currentInvoice=this.findById(id);
-       this.invoiceDAO.delete(currentInvoice);
+    public void delete(long id) {
+        Invoice currentInvoice = this.findById(id);
+        this.invoiceDAO.delete(currentInvoice);
     }
 
     //FIND ALL
-    public Page<Invoice>getInvoices(int page,int size,String sort_by){
+    public Page<Invoice> getInvoices(int page, int size, String sort_by) {
 
-        Pageable pageable= PageRequest.of(page,size, Sort.by(sort_by));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort_by));
         return this.invoiceDAO.findAll(pageable);
     }
 
@@ -52,24 +52,28 @@ public class InvoiceService {
     //qui si potrebbe settare il client e cambiare lo state
     public Invoice updateInvoice(long id, String clientId, String newState) {
         Optional<Invoice> optionalInvoice = this.invoiceDAO.findById(id);
-        if(optionalInvoice.isEmpty()){
-            throw new NotFoundException("invoice with "+id +" does not exist");
+        if (optionalInvoice.isEmpty()) {
+            throw new NotFoundException("invoice with " + id + " does not exist");
         }
-        Invoice existingInvoice= optionalInvoice.get();
+        Invoice existingInvoice = optionalInvoice.get();
 
         Optional<Client> optionalClient = this.clientDAO.findById(Long.valueOf(clientId));
-        if(optionalClient.isEmpty()){
-            throw  new NotFoundException("client with "+ id +" does not exist");
+        if (optionalClient.isEmpty()) {
+            throw new NotFoundException("client with " + id + " does not exist");
         }
-        Client existingClient=optionalClient.get();
+        Client existingClient = optionalClient.get();
 
         //Se c'è tutto, setta il client per l'invoice
-        if(clientId !=null)
-        existingInvoice.setClient(existingClient);
+        if (clientId != null)
+            existingInvoice.setClient(existingClient);
 
         // se newState is provided, settalo
         if (newState != null) {
             existingInvoice.setInvoice_state(newState);
+        }
+
+        if (Long.valueOf(clientId) == existingClient.getId()) {
+            existingInvoice.setInvoice_state("IN_PROGRESS");
         }
 
         return invoiceDAO.save(existingInvoice);
