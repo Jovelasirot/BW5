@@ -12,61 +12,57 @@ import org.springframework.web.multipart.MultipartFile;
 import team5.BW5.entities.Client;
 import team5.BW5.exceptions.BadRequestException;
 import team5.BW5.exceptions.NotFoundException;
-import team5.BW5.payloads.ClientDTO;
+import team5.BW5.payloads.ClientRequestDTO;
 import team5.BW5.repositories.ClientDAO;
-
 import java.io.IOException;
 import java.time.LocalDate;
 
 @Service
 public class ClientService {
-
     @Autowired
-    private ClientDAO cDAO;
-
+    ClientDAO clientDAO;
     @Autowired
-    private Cloudinary cloudinaryUploader;
+    Cloudinary cloudinary;
 
-    public Client save(ClientDTO payload) throws BadRequestException {
+    //FIND BY ID
+    public Client findById(long id){
+        return this.clientDAO.findById(id).orElseThrow(()->new NotFoundException("client with "+id+" not found"));
 
-        this.cDAO.findByEmail(payload.email()).ifPresent(
-                user -> {
-                    throw new BadRequestException("The email: " + user.getEmail() + " is already being used (ᗒᗣᗕ)՞");
-                }
+    }
+    //FIND BY EMAIL
+    public Client findByEmail(String email){
+        return this.clientDAO.findByEmail(email).orElseThrow(()->new NotFoundException("client with "+email+" not found"));
+    }
+    //FIND ALL
+    public Page<Client>getAllClients(int page,int size,String sort_by){
+        Pageable pageable= PageRequest.of(page,size, Sort.by(sort_by));
+        return this.clientDAO.findAll(pageable);
+    }
+
+    //SAVE
+    public Client save (ClientRequestDTO payload) throws BadRequestException{
+        this.clientDAO.findByEmail(payload.email()).ifPresent(
+                client->{throw new BadRequestException("the email "+client.getEmail()+" is already in the system");}
         );
-
-
-        Client newClient = new Client();
-        newClient.setBusinessName(payload.businessName());
-        newClient.setPIVA(payload.pIva());
-        newClient.setLogo_URL("https://ui-avatars.com/api/?name=" + payload.contactName() + "+" + payload.contactSurname());
-        newClient.setEmail(payload.email());
-        newClient.setPhone(Integer.parseInt(payload.phone()));
-        newClient.setPec(payload.pec());
-        newClient.setStartingDate(LocalDate.parse(payload.startingDate()));
-        newClient.setLastContact(LocalDate.parse(payload.lastContact()));
-        newClient.setAnnualTurnover(payload.annualTurnover());
-        newClient.setContactName(payload.contactName());
-        newClient.setContactSurname(payload.contactSurname());
-        newClient.setContactPhone(payload.contactPhone());
-        newClient.setContactEmail(payload.contactEmail());
-
-        return cDAO.save(newClient);
+        Client client=new Client(payload.email(), payload.business_name(), payload.p_IVA(), payload.phone(), payload.annual_turnover(), payload.contactName(), payload.contactSurname(), payload.contactEmail(), payload.phone(), LocalDate.now());
+        return this.clientDAO.save(client);
     }
-
-    public Page<Client> getClients(int page, int size, String sortBy) {
-        if (size > 100) size = 100;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
-        return cDAO.findAll(pageable);
+    //DELETE
+    public void delete (long id){
+        Client found =this.findById(id);
+        this.clientDAO.delete(found);
     }
-
-    public Client findById(Long clientId) {
-        return cDAO.findById(clientId)
-                .orElseThrow(() -> new NotFoundException(clientId));
+    //UPDATE COMPANY_LOGO
+    public String uploadLogo(long id, MultipartFile img)throws IOException {
+        Client client=findById(id);
+        String url= (String) cloudinary.uploader().upload(img.getBytes(), ObjectUtils.emptyMap()).get("url");
+        client.setLogo_URL(url);
+        this.clientDAO.save(client);
+        return url;
     }
-
+    //GENERIC UPDATE
     public Client update(Long clientId, Client updatedClient) {
-        Client clientFound = cDAO.findById(clientId)
+        Client clientFound = clientDAO.findById(clientId)
                 .orElseThrow(() -> new NotFoundException(clientId));
 
         clientFound.setBusinessName(updatedClient.getBusinessName());
@@ -81,24 +77,6 @@ public class ClientService {
         clientFound.setContactSurname(updatedClient.getContactSurname() == null ? clientFound.getContactSurname() : updatedClient.getContactSurname());
         clientFound.setContactPhone(updatedClient.getPhone() == -1 ? clientFound.getContactPhone() : updatedClient.getContactPhone());
 
-        return cDAO.save(clientFound);
+        return clientDAO.save(clientFound);
     }
-
-    public void delete(Long clientId) {
-        Client client = cDAO.findById(clientId)
-                .orElseThrow(() -> new NotFoundException("Client not found with ID: " + clientId));
-
-        cDAO.delete(client);
-    }
-
-    public String uploadLogo(Long clientId, MultipartFile image) throws IOException {
-        Client client = findById(clientId);
-
-        String url = (String) cloudinaryUploader.uploader().upload(image.getBytes(), ObjectUtils.emptyMap()).get("url");
-
-        client.setLogo_URL(url);
-        cDAO.save(client);
-        return url;
-    }
-
 }

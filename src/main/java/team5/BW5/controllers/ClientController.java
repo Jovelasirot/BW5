@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import team5.BW5.entities.Client;
 import team5.BW5.exceptions.BadRequestException;
-import team5.BW5.payloads.ClientDTO;
-import team5.BW5.payloads.ClientResponseDTO;
+import team5.BW5.payloads.ClientRequestDTO;
+import team5.BW5.payloads.ClientRespDTO;
 import team5.BW5.services.ClientService;
 
 import java.io.IOException;
@@ -19,44 +19,50 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
-
     @Autowired
-    private ClientService clientService;
-
+    ClientService clientService;
+    //http://localhost:3001/clients
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ClientResponseDTO saveClient(@RequestBody @Validated ClientDTO payload, BindingResult validation) {
-        if (validation.hasErrors()) {
-            throw new BadRequestException(validation.getAllErrors());
-        } else {
-            return new ClientResponseDTO(this.clientService.save(payload).getId());
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClientRespDTO saveClient(@RequestBody @Validated ClientRequestDTO payload, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            throw new BadRequestException(bindingResult.getAllErrors());
         }
+        return new ClientRespDTO(this.clientService.save(payload).getId());
     }
-
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public Page<Client> getAllClient(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sortBy) {
-        return this.clientService.getClients(page, size, sortBy);
+    public Page<Client> getClients(
+            @RequestParam(defaultValue = "0")int page,
+            @RequestParam(defaultValue = "15")int size,
+            @RequestParam(defaultValue = "id") String sort_by
+    ){
+        return this.clientService.getAllClients(page, size, sort_by);
     }
 
-    @PostMapping("/logo/upload/{clientId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ClientResponseDTO uploadLogo(@PathVariable Long clientId, @RequestParam("image") MultipartFile image) throws IOException {
-        this.clientService.uploadLogo(clientId, image);
-        return new ClientResponseDTO(clientId);
+    //http://localhost:3001/clients/company_logo/{id}
+    @PostMapping("/company_logo/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClientRespDTO uploadCompanyLogo(@PathVariable Long id, @RequestParam("img")MultipartFile img)throws IOException{
+        this.clientService.uploadLogo(id,img);
+        return new ClientRespDTO(id);
     }
 
+    //http://localhost:3001/clients/{id}
+    @GetMapping("/{id}")
+    public Client getCompanyById(@PathVariable Long id){
+        Client found=this.clientService.findById(id);
+        return found;
+    }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteClient(@PathVariable Long id){
+        this.clientService.delete(id);
+    }
     @PutMapping("{clientId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public Client updateClient(@PathVariable Long clientId, @RequestBody Client payload) {
         return this.clientService.update(clientId, payload);
-    }
-
-    @DeleteMapping("{clientId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteClient(@PathVariable Long clientId) {
-        this.clientService.delete(clientId);
     }
 
 }

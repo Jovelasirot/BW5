@@ -2,8 +2,7 @@ package team5.BW5.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,11 +10,13 @@ import java.util.List;
 @Entity
 @Table(name = "clients")
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"invoices", "addresses"})
+@JsonIgnoreProperties({"invoices","addresses"})
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private long id;
     private String businessName;
     private String pIVA;
@@ -32,26 +33,25 @@ public class Client {
     private int contactPhone;
 
     @OneToMany(mappedBy = "client")
-    private List<Invoice> invoices;
+    private List <Invoice> invoices;
 
     @OneToMany(mappedBy = "client")
     private List<Address> addresses;
 
-    public Client(String businessName, String pIVA, String logo_URL, String email, int phone, String pec, LocalDate startingDate, LocalDate lastContact, double annualTurnover, String contactName, String contactSurname, String contactEmail, int contactPhone, List<Invoice> invoices, List<Address> addresses) {
-        this.businessName = businessName;
-        this.pIVA = pIVA;
-        this.logo_URL = logo_URL;
+    public Client(String email, String business_name, String p_IVA, int phone, double annual_turnover, String contactName, String contactSurname, String contactEmail, int contactPhone,LocalDate starting_date) {
         this.email = email;
+        this.businessName = business_name;
+        this.pIVA= p_IVA;
         this.phone = phone;
-        this.pec = pec;
-        this.startingDate = startingDate;
-        this.lastContact = lastContact;
-        this.annualTurnover = annualTurnover;
+        this.annualTurnover = annual_turnover;
         this.contactName = contactName;
         this.contactSurname = contactSurname;
         this.contactEmail = contactEmail;
         this.contactPhone = contactPhone;
-        this.invoices = invoices;
-        this.addresses = addresses;
+        this.startingDate=LocalDate.now();
     }
+    public Client(long id){
+        this.id=id;
+    }
+
 }
