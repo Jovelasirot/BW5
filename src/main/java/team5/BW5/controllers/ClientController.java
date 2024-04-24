@@ -67,10 +67,14 @@ public class ClientController {
         this.clientService.delete(id);
     }
 
-    @PutMapping("{clientId}")
+    @PutMapping("/{clientId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public Client updateClient(@PathVariable Long clientId, @RequestBody Client payload) {
         return this.clientService.update(clientId, payload);
     }
 
+//    @GetMapping("/{email}")
+//    public Client getCompanyByEmail(@PathVariable String email) {
+//        Client found = this.clientService.findByEmail(email);
+//       return found;}
 }

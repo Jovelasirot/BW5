@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -52,7 +53,10 @@ public class Client {
         this.contactSurname = contactSurname;
         this.contactEmail = contactEmail;
         this.contactPhone = contactPhone;
+        this.addresses=new ArrayList<>();
     }
+
+
 
     public Client(long id) {
         this.id = id;
