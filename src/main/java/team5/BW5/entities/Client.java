@@ -2,10 +2,7 @@ package team5.BW5.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,6 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "clients")
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties({"invoices","addresses"})
 public class Client {
@@ -51,4 +49,5 @@ public class Client {
         this.contactEmail = contactEmail;
         this.contactPhone = contactPhone;
     }
+
 }

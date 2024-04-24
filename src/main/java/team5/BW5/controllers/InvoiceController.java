@@ -20,7 +20,7 @@ public class InvoiceController {
 
     //http://localhost:3001/invoices
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN','USER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public Page<Invoice> getInvoices(@RequestParam(defaultValue = "0")int page,
                                      @RequestParam(defaultValue ="15" ) int size,
                                      @RequestParam(defaultValue = "id") String sort_by){
@@ -35,14 +35,21 @@ public class InvoiceController {
         }
         return new InvoiceRespDTO(this.invoiceService.save(payload).getId());
     }
+    //http://localhost:3001/invoices/id
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteInvoice(@PathVariable Long id){
         this.invoiceService.delete(id);
     }
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public Invoice getInvoiceById(@PathVariable Long id){
         return this.invoiceService.findById(id);
     }
+    @PutMapping("/{id}")
+    public  Invoice updateInvoice(@PathVariable long id, @RequestBody Invoice updatedInvoice){
+        return this.invoiceService.updateInvoice(id, String.valueOf(updatedInvoice.getClient().getId()), updatedInvoice.getInvoice_state());
+    }
+
 }

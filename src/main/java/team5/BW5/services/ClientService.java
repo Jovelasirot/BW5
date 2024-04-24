@@ -3,6 +3,10 @@ package team5.BW5.services;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import team5.BW5.entities.Client;
@@ -27,6 +31,11 @@ public class ClientService {
     //FIND BY EMAIL
     public Client findByEmail(String email){
         return this.clientDAO.findByEmail(email).orElseThrow(()->new NotFoundException("client with "+email+" not found"));
+    }
+    //FIND ALL
+    public Page<Client>getAllClients(int page,int size,String sort_by){
+        Pageable pageable= PageRequest.of(page,size, Sort.by(sort_by));
+        return this.clientDAO.findAll(pageable);
     }
 
     //SAVE
