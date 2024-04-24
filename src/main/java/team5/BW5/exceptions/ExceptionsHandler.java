@@ -16,8 +16,8 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorsPayLoad handleNotFound(NotFoundException ex) {
-        return new ErrorsPayLoad(ex.getMessage(), LocalDateTime.now());
+    public ErrorResponseDTO handleNotFound(NotFoundException ex) {
+        return new ErrorResponseDTO(ex.getMessage(), LocalDateTime.now());
     }
 
     @ExceptionHandler(BadRequestException.class)
@@ -43,21 +43,21 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorsPayLoad handleUnauthorized(UnauthorizedException ex) {
-        return new ErrorsPayLoad(ex.getMessage(), LocalDateTime.now());
+    public ErrorResponseDTO handleUnauthorized(UnauthorizedException ex) {
+        return new ErrorResponseDTO(ex.getMessage(), LocalDateTime.now());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorsPayLoad handleGenericErrors(Exception ex) {
+    public ErrorResponseDTO handleGenericErrors(Exception ex) {
         ex.printStackTrace();
-        return new ErrorsPayLoad("Error server side", LocalDateTime.now());
+        return new ErrorResponseDTO("Error server side", LocalDateTime.now());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorsPayLoad handleAccessDenied(AccessDeniedException ex) {
-        return new ErrorsPayLoad("You don't have the permission to access the resource", LocalDateTime.now());
+    public ErrorResponseDTO handleAccessDenied(AccessDeniedException ex) {
+        return new ErrorResponseDTO("You don't have the permission to access the resource", LocalDateTime.now());
     }
 
 }
