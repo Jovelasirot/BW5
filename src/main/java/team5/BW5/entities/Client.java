@@ -17,15 +17,15 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String business_name;
-    private String p_IVA;
+    private String businessName;
+    private String pIVA;
     private String logo_URL;
     private String email;
     private int phone;
     private String pec;
-    private LocalDate starting_date;
-    private LocalDate last_contact;
-    private double annual_turnover;
+    private LocalDate startingDate;
+    private LocalDate lastContact;
+    private double annualTurnover;
     private String contactName;
     private String contactSurname;
     private String contactEmail;
@@ -37,16 +37,16 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private List<Address> addresses;
 
-    public Client(String business_name, String p_IVA, String logo_URL, String email, int phone, String pec, LocalDate starting_date, LocalDate last_contact, int annual_turnover, String contactName, String contactSurname, String contactEmail, int contactPhone, List<Invoice> invoices, List<Address> addresses) {
-        this.business_name = business_name;
-        this.p_IVA = p_IVA;
+    public Client(String businessName, String pIVA, String logo_URL, String email, int phone, String pec, LocalDate startingDate, LocalDate lastContact, double annualTurnover, String contactName, String contactSurname, String contactEmail, int contactPhone, List<Invoice> invoices, List<Address> addresses) {
+        this.businessName = businessName;
+        this.pIVA = pIVA;
         this.logo_URL = logo_URL;
         this.email = email;
         this.phone = phone;
         this.pec = pec;
-        this.starting_date = starting_date;
-        this.last_contact = last_contact;
-        this.annual_turnover = annual_turnover;
+        this.startingDate = startingDate;
+        this.lastContact = lastContact;
+        this.annualTurnover = annualTurnover;
         this.contactName = contactName;
         this.contactSurname = contactSurname;
         this.contactEmail = contactEmail;

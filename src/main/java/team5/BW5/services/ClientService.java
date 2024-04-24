@@ -37,15 +37,15 @@ public class ClientService {
 
 
         Client newClient = new Client();
-        newClient.setBusiness_name(payload.businessName());
-        newClient.setP_IVA(payload.pIva());
+        newClient.setBusinessName(payload.businessName());
+        newClient.setPIVA(payload.pIva());
         newClient.setLogo_URL("https://ui-avatars.com/api/?name=" + payload.contactName() + "+" + payload.contactSurname());
         newClient.setEmail(payload.email());
         newClient.setPhone(Integer.parseInt(payload.phone()));
         newClient.setPec(payload.pec());
-        newClient.setStarting_date(LocalDate.parse(payload.startingDate()));
-        newClient.setLast_contact(LocalDate.parse(payload.lastContact()));
-        newClient.setAnnual_turnover(payload.annualTurnover());
+        newClient.setStartingDate(LocalDate.parse(payload.startingDate()));
+        newClient.setLastContact(LocalDate.parse(payload.lastContact()));
+        newClient.setAnnualTurnover(payload.annualTurnover());
         newClient.setContactName(payload.contactName());
         newClient.setContactSurname(payload.contactSurname());
         newClient.setContactPhone(payload.contactPhone());
@@ -56,7 +56,7 @@ public class ClientService {
 
     public Page<Client> getClients(int page, int size, String sortBy) {
         if (size > 100) size = 100;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
         return cDAO.findAll(pageable);
     }
 
@@ -69,14 +69,14 @@ public class ClientService {
         Client clientFound = cDAO.findById(clientId)
                 .orElseThrow(() -> new NotFoundException(clientId));
 
-        clientFound.setBusiness_name(updatedClient.getBusiness_name());
-        clientFound.setP_IVA(updatedClient.getP_IVA() == null ? clientFound.getP_IVA() : updatedClient.getP_IVA());
+        clientFound.setBusinessName(updatedClient.getBusinessName());
+        clientFound.setPIVA(updatedClient.getPIVA() == null ? clientFound.getPIVA() : updatedClient.getPIVA());
         clientFound.setEmail(updatedClient.getEmail() == null ? clientFound.getEmail() : updatedClient.getEmail());
         clientFound.setPhone(updatedClient.getPhone() == -1 ? clientFound.getPhone() : updatedClient.getPhone());
         clientFound.setPec(updatedClient.getPec() == null ? clientFound.getPec() : updatedClient.getPec());
-        clientFound.setStarting_date(updatedClient.getStarting_date() == null ? clientFound.getStarting_date() : updatedClient.getStarting_date());
-        clientFound.setLast_contact(updatedClient.getLast_contact() == null ? clientFound.getLast_contact() : updatedClient.getLast_contact());
-        clientFound.setAnnual_turnover(updatedClient.getAnnual_turnover() == -1 ? clientFound.getAnnual_turnover() : updatedClient.getAnnual_turnover());
+        clientFound.setStartingDate(updatedClient.getStartingDate() == null ? clientFound.getStartingDate() : updatedClient.getStartingDate());
+        clientFound.setLastContact(updatedClient.getLastContact() == null ? clientFound.getLastContact() : updatedClient.getLastContact());
+        clientFound.setAnnualTurnover(updatedClient.getAnnualTurnover() == -1 ? clientFound.getAnnualTurnover() : updatedClient.getAnnualTurnover());
         clientFound.setContactName(updatedClient.getContactName() == null ? clientFound.getContactName() : updatedClient.getContactName());
         clientFound.setContactSurname(updatedClient.getContactSurname() == null ? clientFound.getContactSurname() : updatedClient.getContactSurname());
         clientFound.setContactPhone(updatedClient.getPhone() == -1 ? clientFound.getContactPhone() : updatedClient.getContactPhone());
