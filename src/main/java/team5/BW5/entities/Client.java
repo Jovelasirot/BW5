@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "clients")
 @Data
 @NoArgsConstructor
-@JsonIgnoreProperties({"invoices","addresses"})
+@JsonIgnoreProperties({"invoices", "addresses"})
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +32,26 @@ public class Client {
     private int contactPhone;
 
     @OneToMany(mappedBy = "client")
-    private List <Invoice> invoices;
+    private List<Invoice> invoices;
 
     @OneToMany(mappedBy = "client")
     private List<Address> addresses;
+
+    public Client(String business_name, String p_IVA, String logo_URL, String email, int phone, String pec, LocalDate starting_date, LocalDate last_contact, int annual_turnover, String contactName, String contactSurname, String contactEmail, int contactPhone, List<Invoice> invoices, List<Address> addresses) {
+        this.business_name = business_name;
+        this.p_IVA = p_IVA;
+        this.logo_URL = logo_URL;
+        this.email = email;
+        this.phone = phone;
+        this.pec = pec;
+        this.starting_date = starting_date;
+        this.last_contact = last_contact;
+        this.annual_turnover = annual_turnover;
+        this.contactName = contactName;
+        this.contactSurname = contactSurname;
+        this.contactEmail = contactEmail;
+        this.contactPhone = contactPhone;
+        this.invoices = invoices;
+        this.addresses = addresses;
+    }
 }
