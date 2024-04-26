@@ -16,12 +16,24 @@ public class Address {
     private String addressNumber;
     private String zipcode;
     private String location;
+
     @ManyToOne
     @JoinColumn
     private Town town;
+
     @ManyToOne
     @JoinColumn
     private Client client;
 
     //to create method to return complete location
+
+
+    public Address(String address, String addressNumber, String zipcode, String location, Town town, Client client) {
+        this.address = address;
+        this.addressNumber = addressNumber;
+        this.zipcode = zipcode;
+        this.location = location;
+        this.town = town;
+        this.client = client;
+    }
 }
