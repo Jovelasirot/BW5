@@ -21,8 +21,7 @@ public class Town {
     private long id;
 
     private String provinceId;
-
-    @Id
+    
     private String townId;
 
     private String townName;

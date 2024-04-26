@@ -30,9 +30,11 @@ public class ComuniCSV implements CommandLineRunner {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] townData = line.trim().split(";");
-                
+
+                if (townData.length < 4) continue;
+
                 String provinceId = townData[0];
-                String townId = townData[0];
+                String townId = townData[1];
                 String townName = townData[2];
                 String provinceName = townData[3];
 
