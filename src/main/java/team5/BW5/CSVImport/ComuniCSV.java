@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.UUID;
 
 @Component
 public class ComuniCSV implements CommandLineRunner {
@@ -22,6 +23,7 @@ public class ComuniCSV implements CommandLineRunner {
     public ComuniCSV(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
 
     public void importTownData() {
         try (InputStream inputStream = provinceCSV.getInputStream();
@@ -35,15 +37,31 @@ public class ComuniCSV implements CommandLineRunner {
                 String townName = townData[2];
                 String provinceName = townData[3];
 
-                Town town = new Town();
-                town.setProvinceId(provinceId);
-                town.setTownId(townId);
-                town.setTownName(townName);
-                town.setProvinceName(provinceName);
+                // Verifica se il town_id esiste già nel database
+                if (isTownIdUnique(townId)) {
+                    Town town = new Town();
+                    town.setProvinceId(provinceId);
+                    town.setTownId(townId);
+                    town.setTownName(townName);
+                    town.setProvinceName(provinceName);
 
-                // Salva la provincia nel database
-                jdbcTemplate.update("INSERT INTO town (province_id, town_id, town_name, province_name) VALUES (?, ?, ?, ?)",
-                        townData, provinceId, townId, townName, provinceName);
+                    // Salva la provincia nel database
+                    jdbcTemplate.update("INSERT INTO town (province_id, town_id, town_name, province_name) VALUES (?, ?, ?, ?)",
+                            provinceId, townId, townName, provinceName);
+                } else {
+                    // Genera un nuovo ID univoco per l'entità duplicata
+                    String uniqueTownId = generateUniqueTownId();
+
+                    Town town = new Town();
+                    town.setProvinceId(provinceId);
+                    town.setTownId(uniqueTownId); // Usa il nuovo ID univoco
+                    town.setTownName(townName);
+                    town.setProvinceName(provinceName);
+
+                    // Salva la provincia nel database
+                    jdbcTemplate.update("INSERT INTO town (province_id, town_id, town_name, province_name) VALUES (?, ?, ?, ?)",
+                            provinceId, uniqueTownId, townName, provinceName);
+                }
             }
 
             System.out.println("Dati importati con successo nella tabella town.");
@@ -52,6 +70,20 @@ public class ComuniCSV implements CommandLineRunner {
             e.printStackTrace();
         }
     }
+
+    private String generateUniqueTownId() {
+        // Genera un nuovo ID univoco (ad esempio, UUID)
+        return UUID.randomUUID().toString();
+    }
+
+
+    private boolean isTownIdUnique(String townId) {
+        // Query per verificare se town_id esiste già nel database
+        String query = "SELECT COUNT(*) FROM town WHERE town_id = ?";
+        int count = jdbcTemplate.queryForObject(query, Integer.class, townId);
+        return count == 0; // Restituisce true se town_id è unico, altrimenti false
+    }
+
 
     @Override
     public void run(String... args) throws Exception {
