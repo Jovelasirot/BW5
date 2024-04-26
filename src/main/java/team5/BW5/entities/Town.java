@@ -1,11 +1,12 @@
 package team5.BW5.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.AccessLevel;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
@@ -14,18 +15,25 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class Town {
+
+    private String provinceId;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
-    private long id;
+    private String townId;
 
-    private String name;
+    private String townName;
 
-    @ManyToOne
-    @JoinColumn(name = "province_id")
-    private Province province;
+    private String provinceName;
+
 
     @JsonIgnore
     @OneToMany(mappedBy = "town")
     private List<Address> addressList; // importare classe address quando presente in Entities
+
+    public Town(String provinceId, String townId, String townName, String provinceName) {
+        this.provinceId = provinceId;
+        this.townId = townId;
+        this.townName = townName;
+        this.provinceName = provinceName;
+    }
 }

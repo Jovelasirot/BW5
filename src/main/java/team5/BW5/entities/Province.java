@@ -1,13 +1,10 @@
 package team5.BW5.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.AccessLevel;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.List;
 
 @Entity
 @Table(name = "province")
@@ -16,19 +13,15 @@ import java.util.List;
 public class Province {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
-    private long id;
-
     private String provinceCode;
 
     private String provinceName;
 
     private String region;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "province")
-    private List<Town> townList;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "province")
+//    private List<Town> townList;
 
 
 }
