@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Objects;
 
 @Component
 public class ComuniCSV implements CommandLineRunner {
@@ -31,7 +32,12 @@ public class ComuniCSV implements CommandLineRunner {
             while ((line = reader.readLine()) != null) {
                 String[] townData = line.trim().split(";");
                 String provinceId = townData[0];
-                String townId = townData[1];
+                String townId = townData[0] + townData[1];
+                if (Objects.equals(townData[1], "#RIF!")) {
+                    townId = townData[0] + 1;
+                }
+
+
                 String townName = townData[2];
                 String provinceName = townData[3];
 
@@ -43,7 +49,7 @@ public class ComuniCSV implements CommandLineRunner {
 
                 // Salva la provincia nel database
                 jdbcTemplate.update("INSERT INTO town (province_id, town_id, town_name, province_name) VALUES (?, ?, ?, ?)",
-                        townData, provinceId, townId, townName, provinceName);
+                        provinceId, townId, townName, provinceName);
             }
 
             System.out.println("Dati importati con successo nella tabella town.");

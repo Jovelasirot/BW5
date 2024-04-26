@@ -1,12 +1,11 @@
 package team5.BW5.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -16,9 +15,14 @@ import java.util.List;
 @NoArgsConstructor
 public class Town {
 
-    private String provinceId;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(value = AccessLevel.NONE)
+    private Long id;
+
+    private String provinceId;
+
     private String townId;
 
     private String townName;
