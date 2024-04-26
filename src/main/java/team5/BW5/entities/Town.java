@@ -15,14 +15,14 @@ import java.util.List;
 @NoArgsConstructor
 public class Town {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(value = AccessLevel.NONE)
-    private Long id;
+    @Setter(AccessLevel.NONE)
+    private long id;
 
     private String provinceId;
 
+    @Id
     private String townId;
 
     private String townName;
