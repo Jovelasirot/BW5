@@ -15,11 +15,11 @@ import java.io.InputStreamReader;
 @Component
 public class ComuniCSV implements CommandLineRunner {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
     @Value("classpath:CSVFile/comuni-italiani.csv")
     private Resource provinceCSV;
 
-    public void TownCSV(JdbcTemplate jdbcTemplate) {
+    public ComuniCSV(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
