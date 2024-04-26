@@ -18,10 +18,11 @@ public class Town {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
+    @JsonIgnore
     private long id;
 
     private String provinceId;
-    
+
     private String townId;
 
     private String townName;

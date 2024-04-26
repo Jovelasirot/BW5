@@ -13,11 +13,11 @@ public class TownService {
     private TownDAO tDAO;
 
     public Town findTownIdByTownName(String townName) {
-        return tDAO.findTownIdByTownName(townName).orElseThrow(() -> new NotFoundException("town: " + townName + " not found"));
+        return tDAO.findTownIdByTownName(townName).orElseThrow(() -> new NotFoundException("Town: " + townName + " not found"));
     }
 
     public Town findById(Long townId) {
         return this.tDAO.findById(townId).orElseThrow(() -> new NotFoundException(townId));
     }
-    
+
 }

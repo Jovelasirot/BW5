@@ -5,8 +5,9 @@ public class NotFoundException extends RuntimeException {
         super("Record with id: " + id + " was not found ꜀( ˊ̠˂˃ˋ̠ )꜆.");
     }
 
-    public NotFoundException(String email) {
-        super("The email: " + email + " was not found");
+    public NotFoundException(String msg) {
+        super(msg);
     }
+
 
 }
