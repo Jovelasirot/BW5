@@ -1,7 +1,6 @@
 package team5.BW5.CSVImport;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 @Component
-public class ComuniCSV implements CommandLineRunner {
+public class ComuniCSV {
 
     private final JdbcTemplate jdbcTemplate;
     @Value("classpath:CSVFile/comuni-italiani.csv")
@@ -56,8 +55,4 @@ public class ComuniCSV implements CommandLineRunner {
         }
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        this.importTownData();
-    }
 }

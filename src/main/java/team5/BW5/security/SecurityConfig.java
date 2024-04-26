@@ -16,6 +16,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -32,9 +34,12 @@ public class SecurityConfig {
 
         httpSecurity.authorizeHttpRequests(http -> http.requestMatchers("/**").permitAll());
 
+        httpSecurity.cors(withDefaults());
+
         return httpSecurity.build();
     }
 
+ 
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(11);
@@ -45,7 +50,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:5173/"));
         config.setAllowedMethods(Arrays.asList("*"));
         config.setAllowedHeaders(Arrays.asList("*"));
 
