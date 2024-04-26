@@ -20,14 +20,15 @@ public class Province {
     @Setter(AccessLevel.NONE)
     private long id;
 
-    private String name;
+    private String provinceCode;
+
+    private String provinceName;
+
+    private String region;
 
     @JsonIgnore
     @OneToMany(mappedBy = "province")
     private List<Town> townList;
 
-    private String provinceCode;
-
-    private String region;
 
 }
